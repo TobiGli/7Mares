@@ -1,0 +1,245 @@
+header {
+  flex-direction: column;
+  width: 100%;
+  display: flex;
+  height: px;
+  align-items: center;
+  background-color: rgb(37, 129, 172);
+}
+.usuario {
+  border-radius: 200px;
+  color: aliceblue;
+  margin-right: 90px;
+  margin: 5mm;
+}
+.logo img {
+  margin-left: 150px;
+  max-width: 200px;
+}
+.tisup {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(76, 184, 226);
+}
+.tiinf {
+  width: 100%;
+  margin: auto;
+  background-color: rgb(46, 137, 179);
+  justify-content: center;
+}
+.menu-horizontal {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+}
+.menu-horizontal > li > a {
+  display: block;
+  padding: 15px;
+  color: aliceblue;
+  text-decoration: none;
+}
+.menu-horizontal > li:hover {
+  background-color: black;
+  border-radius: 3px;
+}
+.menu-vertical {
+  position: absolute;
+  display: none;
+  list-style: none;
+  width: 7%;
+  background-color: rgba(2, 51, 124, 0.808);
+  margin-right: 50px;
+  border-radius: 3px;
+}
+
+.menu-horizontal li:hover .menu-vertical {
+  display: block;
+}
+.menu-vertical li:hover {
+  background-color: rgba(1, 20, 49, 0.808);
+  width: 100%;
+  border-radius: 3px;
+}
+.menu-vertical li a {
+  display: block;
+  color: aliceblue;
+  padding: 15px 15px 15px 15px;
+  text-decoration: none;
+  max-width: 900px;
+}
+.menu-vert {
+  position: absolute;
+  display: none;
+  list-style: none;
+  width: 5%;
+  background-color: rgba(2, 51, 124, 0.808);
+  margin-right: 0px;
+  border-radius: 3px;
+}
+.menu-horizontal li:hover .menu-vert {
+  display: block;
+}
+.bsup {
+  margin: 0px;
+  color: black;
+  background-size: 100%;
+  text-decoration: none;
+  padding: 15px 15px 15px 15px;
+}
+.bsup:hover {
+  background-color: rgb(0, 0, 0);
+  color: aliceblue;
+  border-radius: 3px;
+}
+.CAMBIO {
+  position: relative;
+  color: aliceblue;
+  right: -5px;
+}
+main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.contacto {
+  position: fixed;
+  background-color: green;
+  bottom: 50px;
+  left: 97%;
+  font-size: 20px;
+}
+.slider-container {
+  width: auto;
+  height: auto;
+  margin-top: 50px auto 0;
+  overflow: hidden;
+}
+.slider-container ul {
+  align-items: center;
+  display: flex;
+  padding: 0%;
+  width: 400%;
+  animation: slide 15s infinite alternate ease-in-out;
+}
+.slider-container li {
+  list-style: none;
+  width: 100%;
+}
+.slider-container img {
+  width: 100%;
+}
+@keyframes slide {
+  0% {
+    margin-left: 0%;
+  }
+  20% {
+    margin-left: 0%;
+  }
+
+  25% {
+    margin-left: -100%;
+  }
+  45% {
+    margin-left: -100%;
+  }
+
+  50% {
+    margin-left: -200%;
+  }
+  70% {
+    margin-left: -200%;
+  }
+
+  75% {
+    margin-left: -300%;
+  }
+  100% {
+    margin-left: -300%;
+  }
+}
+
+.body-titulo {
+  -webkit-text-stroke: 1px black;
+  color: #ffffff;
+  font-size-adjust: 1;
+  font-style: inherit;
+  font-family: "Roboto", sans-serif;
+  font-size: x-large;
+  border-radius: 20px;
+}
+
+.owl-container {
+  display: flex;
+  width: 95%;
+}
+.owl-carousel {
+  width: 100%;
+  display: flex;
+}
+.item {
+  width: 100%;
+  background-color: black;
+}
+.item :hover {
+  opacity: 0.8;
+}
+.contacto {
+  position: fixed;
+  background-color: green;
+  bottom: 100px;
+  left: 95%;
+  font-size: 35px;
+  border-radius: 23px;
+  z-index: 3;
+}
+footer {
+  background-color: rgb(18, 72, 107);
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.f0 {
+  align-items: center;
+  justify-content: center;
+  margin-left: 1500px;
+}
+
+.f1 {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.text-f {
+  padding: 10px;
+  margin-top: 30px;
+}
+.text-f2 {
+  padding: 10px;
+  border-left: solid;
+  margin-top: 30px;
+  margin-left: 6px;
+}
+.text-f3 {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+.f2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.f2 img {
+  max-width: 200px;
+}
+.fa-brands {
+  padding: 5px;
+}
