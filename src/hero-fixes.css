@@ -1,0 +1,31 @@
+/* Desktop hero spacing: keep the headline and metrics in separate visual zones. */
+@media (min-width: 801px) {
+  .hero-content {
+    max-width: 760px;
+    padding: 92px 8vw 190px !important;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(52px, 5vw, 76px);
+    max-width: 590px;
+  }
+
+  .hero-copy {
+    max-width: 500px;
+  }
+
+  .hero-stats {
+    bottom: 30px;
+    display: grid !important;
+    gap: 24px !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    left: 8vw;
+    width: calc(100% - 16vw) !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .hero-content {
+    padding-bottom: 180px !important;
+  }
+}

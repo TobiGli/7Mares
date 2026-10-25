@@ -4,6 +4,7 @@ import { Anchor, ArrowRight, ChevronDown, Heart, MapPin, Menu, MessageCircle, Se
 import './styles.css';
 import './error-pages.css';
 import './auth.css';
+import './hero-fixes.css';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 
 const boats = [
