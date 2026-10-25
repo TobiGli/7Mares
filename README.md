@@ -24,4 +24,4 @@ También puedes usar el archivo `render.yaml` como Blueprint. Para futuras APIs,
 
 La base recomendada es Supabase: PostgreSQL administrado, API REST automática y plan gratuito suficiente para comenzar. Crea un proyecto en [supabase.com](https://supabase.com), abre **SQL Editor**, ejecuta `supabase/schema.sql` y copia las variables de `.env.example` en Vercel en **Settings > Environment Variables**.
 
-La interfaz incluye datos locales para previsualizarse sin credenciales. Para conectar el catálogo, instala `@supabase/supabase-js`, crea el cliente con esas variables y reemplaza el array `boats` de `src/main.jsx` por una consulta a la tabla `boats`.
+La interfaz incluye datos locales para previsualizarse sin credenciales. En Render configura `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` usando la clave pública `anon` o `publishable` de Supabase. Nunca uses `service_role` ni una clave `sb_secret_` en variables `VITE_`, porque Vite las expone al navegador.
