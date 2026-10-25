@@ -65,6 +65,20 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
+create or replace function public.update_my_profile(new_full_name text)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  update public.profiles
+  set full_name = nullif(trim(new_full_name), '')
+  where id = auth.uid();
+$$;
+
+revoke all on function public.update_my_profile(text) from public;
+grant execute on function public.update_my_profile(text) to authenticated;
+
 drop policy if exists "Admins can create boats" on public.boats;
 create policy "Admins can create boats" on public.boats for insert with check (public.is_admin());
 drop policy if exists "Admins can update boats" on public.boats;
