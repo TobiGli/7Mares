@@ -14,6 +14,7 @@ create table if not exists public.boats (
 );
 
 alter table public.boats enable row level security;
+drop policy if exists "Public can read boats" on public.boats;
 create policy "Public can read boats" on public.boats for select using (true);
 
 insert into public.boats (name, type, location, price, year, length, cabins, image_url, tag, featured) values
