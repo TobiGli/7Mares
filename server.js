@@ -50,6 +50,13 @@ const server = http.createServer((request, response) => {
     return;
   }
 
+  const pathname = new URL(request.url, `http://localhost:${port}`).pathname;
+  if (pathname === '/healthz') {
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    response.end(JSON.stringify({ status: 'ok' }));
+    return;
+  }
+
   if (!filePath) {
     response.writeHead(403);
     response.end('Forbidden');
@@ -58,6 +65,12 @@ const server = http.createServer((request, response) => {
 
   fs.stat(filePath, (error, stats) => {
     if (error || !stats.isFile()) {
+      if (pathname.startsWith('/assets/') || pathname.startsWith('/Imagenes/')) {
+        response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        response.end('Asset Not Found');
+        return;
+      }
+
       const fallbackPath = path.join(clientDirectory, 'index.html');
       fs.stat(fallbackPath, (fallbackError, fallbackStats) => {
         if (fallbackError || !fallbackStats.isFile()) {
