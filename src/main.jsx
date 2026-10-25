@@ -1,12 +1,13 @@
 import { Component, lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes, Navigate, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, Link, useNavigate } from 'react-router-dom';
 import { Anchor, ArrowRight, ChevronDown, Heart, MapPin, Menu, MessageCircle, Search, ShieldCheck, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import './styles.css';
 import './error-pages.css';
 import './auth.css';
 import './hero-fixes.css';
 import './performance.css';
+import './session.css';
 import { isSupabaseConfigured, supabase, supabaseConfigError } from './lib/supabase';
 
 const AccountPage = lazy(() => import('./pages/AccountPage.jsx'));
@@ -84,6 +85,7 @@ function AuthModal({ onClose, onAuthenticated }) {
 }
 
 function App() {
+  const navigate = useNavigate();
   const [type, setType] = useState('Todos');
   const [query, setQuery] = useState('');
   const [favorites, setFavorites] = useState([]);
@@ -97,6 +99,7 @@ function App() {
   const visible = useMemo(() => boats.filter((boat) => (type === 'Todos' || boat.type === type) && `${boat.name} ${boat.location}`.toLowerCase().includes(query.toLowerCase())), [type, query]);
   const notify = (text) => { setToast(text); window.setTimeout(() => setToast(''), 2600); };
   const toggleFavorite = (id) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  const openAccount = () => session ? navigate('/cuenta') : setAuthOpen(true);
 
   useEffect(() => {
     if (!supabase) return undefined;
@@ -106,7 +109,7 @@ function App() {
   }, []);
 
   return <div className="app-shell">
-    <header className="site-header"><a className="brand" href="#top"><span className="brand-mark"><Anchor size={20} /></span><span>7<span>MARES</span></span></a><nav className={menu ? 'main-nav open' : 'main-nav'}><a href="#barcos" onClick={() => setMenu(false)}>Explorar barcos</a><a href="#experiencia" onClick={() => setMenu(false)}>La experiencia</a><a href="#contacto" onClick={() => setContact(true)}>Asesoría privada</a></nav><div className="header-actions"><button className="saved-link" onClick={() => notify(`${favorites.length} barcos guardados`)}><Heart size={17} /><span>Guardados</span><b>{favorites.length}</b></button><button className="account-button" onClick={() => setAuthOpen(true)}>{session ? 'Mi cuenta' : 'Iniciar sesión'}</button><button className="menu-button" onClick={() => setMenu(!menu)} aria-label="Abrir menú">{menu ? <X /> : <Menu />}</button></div></header>
+    <header className="site-header"><a className="brand" href="#top"><span className="brand-mark"><Anchor size={20} /></span><span>7<span>MARES</span></span></a><nav className={menu ? 'main-nav open' : 'main-nav'}><a href="#barcos" onClick={() => setMenu(false)}>Explorar barcos</a><a href="#experiencia" onClick={() => setMenu(false)}>La experiencia</a><a href="#contacto" onClick={() => setContact(true)}>Asesoría privada</a></nav><div className="header-actions"><button className="saved-link" onClick={() => notify(`${favorites.length} barcos guardados`)}><Heart size={17} /><span>Guardados</span><b>{favorites.length}</b></button><button className="account-button" onClick={openAccount}>{session ? session.user.email.split('@')[0] : 'Iniciar sesión'}</button><button className="menu-button" onClick={() => setMenu(!menu)} aria-label="Abrir menú">{menu ? <X /> : <Menu />}</button></div></header>
     <main id="top"><section className="hero"><img src="/Imagenes/Stock/marcin-ciszewski-Zexjl0v3MRU-unsplash.jpg" alt="Yate navegando en el mar" className="hero-image" /><div className="hero-shade" /><div className="hero-content" style={{ paddingBottom: '150px' }}><p className="kicker light"><Sparkles size={15} /> Curaduría náutica desde 1998</p><h1>Tu próximo <em>horizonte</em><br />empieza aquí.</h1><p className="hero-copy">Barcos excepcionales, seleccionados para quienes entienden que la libertad también tiene una dirección.</p><a className="primary-button" href="#barcos">Explorar la colección <ArrowRight size={17} /></a></div><div className="hero-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', width: 'calc(100% - 16vw)', gap: '18px' }}><span><strong>+120</strong> embarcaciones</span><span><strong>12</strong> destinos</span><span><strong>25 años</strong> de experiencia</span></div></section>
       <section className="search-panel" id="barcos"><div className="search-heading"><div><p className="kicker">Encuentra tu barco</p><h2>Una colección con rumbo propio.</h2></div><span className="search-count">{visible.length} resultados</span></div><div className="search-controls"><label className="search-field"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por modelo o destino" /></label><div className="type-filters">{types.map((item) => <button key={item} className={type === item ? 'active' : ''} onClick={() => setType(item)}>{item}</button>)}</div><button className="filter-button"><SlidersHorizontal size={17} /> Filtros</button></div></section>
       <section className="collection"><div className="collection-head"><div><p className="kicker">Selección editorial</p><h2>Barcos destacados</h2></div><button className="sort-button">Más relevantes <ChevronDown size={16} /></button></div><div className="boat-grid">{visible.map((boat) => <Card key={boat.id} boat={boat} favorite={favorites.includes(boat.id)} onFavorite={toggleFavorite} onSelect={setSelected} />)}</div>{!visible.length && <div className="empty-state"><Search size={28} /><h3>No encontramos ese rumbo</h3><p>Prueba con otra marca, ciudad o categoría.</p></div>}</section>
