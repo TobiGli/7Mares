@@ -1,6 +1,6 @@
 # 7Mares
 
-Marketplace React para venta de barcos, preparado para Vercel.
+Marketplace React para venta de barcos, preparado para desplegarse como Web Service en Render y crecer con backend.
 
 ## Desarrollo local
 
@@ -9,12 +9,16 @@ npm install
 npm run dev
 ```
 
-## Deploy en Vercel
+## Deploy en Render como Web Service
 
-1. Sube el repositorio a GitHub.
-2. En Vercel selecciona **New Project** e importa el repositorio.
-3. Framework preset: **Vite**. Build command: `npm run build`. Output directory: `dist`.
-4. Despliega. `vercel.json` mantiene funcionando las rutas de la SPA.
+1. Sube la rama `develop` a GitHub.
+2. En Render selecciona **New + > Web Service** e importa el repositorio.
+3. Branch: `develop`.
+4. Build command: `npm install && npm run build`.
+5. Start command: `npm start`.
+6. Render usará el puerto asignado mediante `PORT`; `server.js` sirve `dist` y las imágenes locales.
+
+También puedes usar el archivo `render.yaml` como Blueprint. Para futuras APIs, añade rutas `/api` al mismo servidor o separa el backend cuando crezca el proyecto.
 
 ## Base de datos
 

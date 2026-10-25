@@ -1,8 +1,10 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const rootDirectory = __dirname;
+const rootDirectory = path.dirname(fileURLToPath(import.meta.url));
+const clientDirectory = path.join(rootDirectory, 'dist');
 const port = Number(process.env.PORT) || 3000;
 
 const contentTypes = {
@@ -20,10 +22,11 @@ const contentTypes = {
 
 function getFilePath(requestUrl) {
   const pathname = decodeURIComponent(new URL(requestUrl, `http://localhost:${port}`).pathname);
-  const relativePath = pathname === '/' ? '7Mares72.html' : pathname.slice(1);
-  const filePath = path.resolve(rootDirectory, relativePath);
+  const relativePath = pathname === '/' ? 'index.html' : pathname.slice(1);
+  const baseDirectory = pathname.startsWith('/Imagenes/') ? rootDirectory : clientDirectory;
+  const filePath = path.resolve(baseDirectory, relativePath);
 
-  if (filePath !== rootDirectory && !filePath.startsWith(`${rootDirectory}${path.sep}`)) {
+  if (!filePath.startsWith(`${baseDirectory}${path.sep}`)) {
     return null;
   }
 
@@ -55,8 +58,17 @@ const server = http.createServer((request, response) => {
 
   fs.stat(filePath, (error, stats) => {
     if (error || !stats.isFile()) {
-      response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      response.end('Not Found');
+      const fallbackPath = path.join(clientDirectory, 'index.html');
+      fs.stat(fallbackPath, (fallbackError, fallbackStats) => {
+        if (fallbackError || !fallbackStats.isFile()) {
+          response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+          response.end('Not Found');
+          return;
+        }
+
+        response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        fs.createReadStream(fallbackPath).pipe(response);
+      });
       return;
     }
 
