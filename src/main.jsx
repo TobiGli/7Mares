@@ -10,7 +10,7 @@ import './performance.css';
 import { isSupabaseConfigured, supabase, supabaseConfigError } from './lib/supabase';
 
 const AccountPage = lazy(() => import('./pages/AccountPage.jsx'));
-const AdminPage = lazy(() => import('./pages/AdminPage.jsx'));
+const AdminPage = lazy(() => import('./pages/AdminCrudPage.jsx'));
 
 const boats = [
   { id: 1, name: 'Azimut 62 Fly', type: 'Yates', location: 'Palma, Mallorca', price: 1250000, year: 2022, length: '18.9 m', cabins: 3, image: '/Imagenes/Stock/mansour-ujJlWFDPa58-unsplash.jpg', tag: 'Selección 7Mares' },
