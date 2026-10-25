@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { Component, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Anchor, ArrowRight, ChevronDown, Heart, MapPin, Menu, MessageCircle, Search, ShieldCheck, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import './styles.css';
+import './error-pages.css';
 
 const boats = [
   { id: 1, name: 'Azimut 62 Fly', type: 'Yates', location: 'Palma, Mallorca', price: 1250000, year: 2022, length: '18.9 m', cabins: 3, image: '/Imagenes/Stock/mansour-ujJlWFDPa58-unsplash.jpg', tag: 'Selección 7Mares' },
@@ -17,7 +18,31 @@ function Card({ boat, favorite, onFavorite, onSelect }) {
   return <article className="boat-card"><div className="boat-image-wrap"><img src={boat.image} alt={boat.name} /><span className="boat-tag">{boat.tag}</span><button className={`icon-button ${favorite ? 'is-favorite' : ''}`} onClick={() => onFavorite(boat.id)} aria-label="Guardar barco"><Heart size={18} fill={favorite ? 'currentColor' : 'none'} /></button></div><div className="boat-card-body"><div className="card-title-row"><div><p className="eyebrow">{boat.type}</p><h3>{boat.name}</h3></div><span className="year">{boat.year}</span></div><p className="location"><MapPin size={14} />{boat.location}</p><div className="boat-specs"><span>{boat.length}</span><span>{boat.cabins ? `${boat.cabins} cabinas` : 'Open deck'}</span></div><div className="card-footer"><strong>{money(boat.price)}</strong><button className="text-button" onClick={() => onSelect(boat)}>Ver detalles <ArrowRight size={16} /></button></div></div></article>;
 }
 
+class ErrorBoundary extends Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <section className="error-page"><span className="error-code">500</span><h1>Algo se salió de rumbo.</h1><p>La página encontró un problema inesperado. Vuelve a intentarlo o regresa al inicio.</p><button className="primary-button" onClick={() => window.location.reload()}>Intentar de nuevo <ArrowRight size={17} /></button></section>;
+    }
+
+    return this.props.children;
+  }
+}
+
+function NotFoundPage() {
+  return <section className="error-page"><span className="error-code">404</span><h1>Este rumbo no existe.</h1><p>La página que buscas ya no está aquí o nunca formó parte de nuestra carta de navegación.</p><a className="primary-button" href="/">Volver al inicio <ArrowRight size={17} /></a></section>;
+}
+
 function App() {
+  if (!['/', '/index.html'].includes(window.location.pathname)) {
+    return <NotFoundPage />;
+  }
+
   const [type, setType] = useState('Todos');
   const [query, setQuery] = useState('');
   const [favorites, setFavorites] = useState([]);
@@ -46,4 +71,4 @@ function App() {
 }
 export default App;
 
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(<ErrorBoundary><App /></ErrorBoundary>);
