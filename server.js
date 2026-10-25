@@ -20,6 +20,14 @@ const contentTypes = {
   '.woff2': 'font/woff2'
 };
 
+function setSecurityHeaders(response) {
+  response.setHeader('Content-Security-Policy', "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; form-action 'self'");
+  response.setHeader('X-Content-Type-Options', 'nosniff');
+  response.setHeader('X-Frame-Options', 'DENY');
+  response.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.setHeader('Permissions-Policy', 'camera=(), geolocation=(), microphone=()');
+}
+
 function getFilePath(requestUrl) {
   const pathname = decodeURIComponent(new URL(requestUrl, `http://localhost:${port}`).pathname);
   const relativePath = pathname === '/' ? 'index.html' : pathname.slice(1);
@@ -34,6 +42,8 @@ function getFilePath(requestUrl) {
 }
 
 const server = http.createServer((request, response) => {
+  setSecurityHeaders(response);
+
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     response.writeHead(405, { Allow: 'GET, HEAD' });
     response.end('Method Not Allowed');
