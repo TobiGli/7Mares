@@ -88,7 +88,7 @@ const server = http.createServer((request, response) => {
     const extension = path.extname(filePath).toLowerCase();
     response.writeHead(200, {
       'Content-Type': contentTypes[extension] || 'application/octet-stream',
-      'Cache-Control': 'public, max-age=3600'
+      'Cache-Control': extension === '.html' ? 'no-store' : 'public, max-age=31536000, immutable'
     });
 
     if (request.method === 'HEAD') {
