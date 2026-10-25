@@ -45,6 +45,9 @@ as $$
   select exists (select 1 from public.profiles where id = auth.uid() and role = 'admin');
 $$;
 
+revoke all on function public.is_admin() from public;
+grant execute on function public.is_admin() to authenticated;
+
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -113,7 +116,7 @@ create table if not exists public.analytics_events (
 
 alter table public.analytics_events enable row level security;
 drop policy if exists "Visitors can create analytics events" on public.analytics_events;
-create policy "Visitors can create analytics events" on public.analytics_events for insert with check (true);
+create policy "Visitors can create analytics events" on public.analytics_events for insert with check (user_id is null or auth.uid() = user_id);
 drop policy if exists "Admins can read analytics events" on public.analytics_events;
 create policy "Admins can read analytics events" on public.analytics_events for select using (public.is_admin());
 create index if not exists analytics_events_created_at_idx on public.analytics_events(created_at desc);
