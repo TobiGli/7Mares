@@ -7,7 +7,7 @@ import './error-pages.css';
 import './auth.css';
 import './hero-fixes.css';
 import './performance.css';
-import { isSupabaseConfigured, supabase } from './lib/supabase';
+import { isSupabaseConfigured, supabase, supabaseConfigError } from './lib/supabase';
 
 const AccountPage = lazy(() => import('./pages/AccountPage.jsx'));
 const AdminPage = lazy(() => import('./pages/AdminPage.jsx'));
@@ -58,7 +58,7 @@ function AuthModal({ onClose, onAuthenticated }) {
     event.preventDefault();
     setError('');
     if (!isSupabaseConfigured) {
-      setError('Configura Supabase en las variables de entorno de Render para activar las cuentas.');
+      setError(supabaseConfigError || 'Configura Supabase en las variables de entorno de Render para activar las cuentas.');
       return;
     }
     setBusy(true);
