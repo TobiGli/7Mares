@@ -62,6 +62,12 @@ function AuthModal({ onClose, onAuthenticated }) {
       return;
     }
     setBusy(true);
+    if (mode === 'reset') {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/cuenta` });
+      setBusy(false);
+      setError(resetError ? resetError.message : 'Revisa tu email para recuperar el acceso.');
+      return;
+    }
     const result = mode === 'login'
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } });
@@ -74,7 +80,7 @@ function AuthModal({ onClose, onAuthenticated }) {
     else setError('Revisa tu email para confirmar la cuenta.');
   };
 
-  return <div className="modal-backdrop" onClick={onClose}><div className="contact-modal auth-modal" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={onClose} aria-label="Cerrar"><X /></button><p className="kicker">Cuenta 7Mares</p><h2>{mode === 'login' ? 'Vuelve a tu rumbo.' : 'Crea tu cuenta.'}</h2><p>{mode === 'login' ? 'Guarda barcos y recibe asesoría personalizada.' : 'Guarda favoritos y sigue tus consultas.'}</p><form onSubmit={submit}>{mode === 'signup' && <input required value={fullName} onChange={(event) => setFullName(event.target.value)} placeholder="Nombre completo" />}<input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" /><input required minLength="6" type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Contraseña" />{error && <p className="auth-error">{error}</p>}<button className="primary-button" type="submit" disabled={busy}>{busy ? 'Cargando...' : mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'} <ArrowRight size={17} /></button></form><button className="auth-switch" onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); setError(''); }}>{mode === 'login' ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}</button></div></div>;
+  return <div className="modal-backdrop" onClick={onClose}><div className="contact-modal auth-modal" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={onClose} aria-label="Cerrar"><X /></button><p className="kicker">Cuenta 7Mares</p><h2>{mode === 'reset' ? 'Recupera tu acceso.' : mode === 'login' ? 'Vuelve a tu rumbo.' : 'Crea tu cuenta.'}</h2><p>{mode === 'reset' ? 'Te enviaremos un enlace seguro a tu email.' : mode === 'login' ? 'Guarda barcos y recibe asesoría personalizada.' : 'Guarda favoritos y sigue tus consultas.'}</p><form onSubmit={submit}>{mode === 'signup' && <input required value={fullName} onChange={(event) => setFullName(event.target.value)} placeholder="Nombre completo" />}<input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" />{mode !== 'reset' && <input required minLength="6" type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Contraseña" />}{error && <p className="auth-error">{error}</p>}<button className="primary-button" type="submit" disabled={busy}>{busy ? 'Cargando...' : mode === 'reset' ? 'Enviar enlace' : mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'} <ArrowRight size={17} /></button></form>{mode === 'login' && <button className="auth-switch" onClick={() => { setMode('reset'); setError(''); }}>¿Olvidaste tu contraseña?</button>}<button className="auth-switch" onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); setError(''); }}>{mode === 'signup' ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}</button></div></div>;
 }
 
 function App() {
