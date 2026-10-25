@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { Anchor, ArrowRight, ChevronDown, Heart, MapPin, Menu, MessageCircle, Search, ShieldCheck, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import './styles.css';
 
@@ -44,3 +45,5 @@ function App() {
   </div>;
 }
 export default App;
+
+createRoot(document.getElementById('root')).render(<App />);
