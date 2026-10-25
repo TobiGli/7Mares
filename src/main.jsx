@@ -7,7 +7,6 @@ import './error-pages.css';
 import './auth.css';
 import './hero-fixes.css';
 import './performance.css';
-import './session.css';
 import { isSupabaseConfigured, supabase, supabaseConfigError } from './lib/supabase';
 
 const AccountPage = lazy(() => import('./pages/AccountPage.jsx'));
